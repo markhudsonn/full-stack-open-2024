@@ -3,10 +3,15 @@ import Person from './components/Person'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', id: self.name, phone: '040-1234567' },
-  ]) 
+    { name: 'Arto Hellas', phone: '040-123456', id: 'Arto Hellas' },
+    { name: 'Ada Lovelace', phone: '39-44-5323523', id: 'Ada Lovelace' },
+    { name: 'Dan Abramov', phone: '12-43-234345', id: 'Dan Abramov' },
+    { name: 'Mary Poppendieck', phone: '39-23-6423122', id: 'Mary Poppendieck' }
+  ])
+  
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -32,26 +37,43 @@ const App = () => {
     setNewPhone(event.target.value)
   }
 
+  const handleFilter = (event) => {
+    setNewFilter(event.target.value)
+  }
+
+  const peopleToShow = persons.filter(person => person.name.toLowerCase().includes(newFilter.toLowerCase()))
+
   return (
     <div>
-      <h2>Phonebook</h2>
-      <form onSubmit={addPerson} id="form">
-        <div>
-          name: <input value={newName} onChange={handleNewName} id="name" />
-        </div>
-        <div>
-          phone: <input value={newPhone} onChange={handleNewPhone} id="phone" />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map(person => 
-          <Person key={person.id} person={person} />
-        )}
-      </ul>
+      <h1>Phonebook</h1>
+      <div>
+        <h2>Filter</h2>
+        <form>
+          include names with: <input value={newFilter} onChange={handleFilter} />
+        </form>
+      </div>
+      <div>
+        <h2>Add new</h2>
+        <form onSubmit={addPerson}>
+          <div>
+            name: <input value={newName} onChange={handleNewName} />
+          </div>
+          <div>
+            phone: <input value={newPhone} onChange={handleNewPhone} />
+          </div>
+          <div>
+            <button type="submit">add</button>
+          </div>
+        </form>
+      </div>
+      <div>
+        <h2>Numbers</h2>
+        <ul>
+          {peopleToShow.map(person =>
+            <Person key={person.id} person={person} />
+          )}
+        </ul>
+      </div>
     </div>
   )
 }
