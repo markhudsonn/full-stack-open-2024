@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
+import personService from './services/person'
 
 import PersonList from './components/PersonList'
 import Filter from './components/Filter'
@@ -8,8 +8,8 @@ import PersonForm from './components/PersonForm'
 const App = () => {
   const [persons, setPersons] = useState([])
   const hook = () => {
-    axios.get('http://localhost:3001/persons').then(response => {
-      setPersons(response.data)
+    personService.getAll().then(initialPersons => {
+      setPersons(initialPersons)
     })
   }
   useEffect(hook, [])
@@ -29,9 +29,20 @@ const App = () => {
       id: newName,
       phone: newPhone,
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewPhone('')
+    personService.create(personObject).then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson))
+      setNewName('')
+      setNewPhone('')
+    })
+  }
+
+  const deletePerson = (id) => {
+    const person = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${person.name}?`)) {
+      personService.remove(id).then(() => {
+        setPersons(persons.filter(person => person.id !== id))
+      })
+    }
   }
 
   const handleNewName = (event) => {
@@ -53,7 +64,7 @@ const App = () => {
       <h1>Phonebook</h1>
       <Filter value={newFilter} onChange={handleFilter} />
       <PersonForm addPerson={addPerson} newName={newName} handleNewName={handleNewName} newPhone={newPhone} handleNewPhone={handleNewPhone} />
-      <PersonList persons={peopleToShow} />
+      <PersonList persons={peopleToShow} deletePerson={deletePerson} />
     </div>
   )
 }
