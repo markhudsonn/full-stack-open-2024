@@ -46,7 +46,7 @@ const App = () => {
       personService.remove(id).then(() => {
         setPersons(persons.filter(person => person.id !== id))
       }).catch(error => {
-        alert(`the person '${person.name}' was already deleted from server`)
+        setMessage(`Error: Information of ${person.name} has already been removed from server`)
         setPersons(persons.filter(p => p.id !== id))
       })
     }
@@ -58,8 +58,9 @@ const App = () => {
     if (window.confirm(`${person.name} is already added to phonebook, replace the old number with a new one?`)) {
       personService.update(id, changedPerson).then(returnedPerson => {
         setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+        setMessage(`Updated ${returnedPerson.name}`)
       }).catch(error => {
-        alert(`the person '${person.name}' was already deleted from server`)
+        setMessage(`Error: Information of ${person.name} has already been removed from server`)
         setPersons(persons.filter(p => p.id !== id))
       }
       )
