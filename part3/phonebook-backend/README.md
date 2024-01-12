@@ -26,3 +26,10 @@ To deploy the application:
 
 - Ensure you have the `fly` CLI installed
 - Run `npm run deploy` to deploy to Fly.io
+
+
+## MongoDB
+
+For exercise 3.12, run:
+
+```node mongo.jsx <password> <name> <number>```
