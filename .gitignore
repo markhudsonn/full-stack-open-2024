@@ -30,6 +30,8 @@ package.json
 vite.config.js
 vite.svg
 
+.env
+
 # Practice folders
 part2/exercise1
 part3/notes
