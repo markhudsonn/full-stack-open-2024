@@ -39,7 +39,15 @@ app.get('/api/people', (request, response) => {
 // Get person by id
 app.get('/api/people/:id', (request, response) => {
   Person.findById(request.params.id).then(person => {
-    response.json(person)
+    if (person) {
+      response.json(person)
+    } else {
+      response.status(404).end()
+    }
+  }
+  ).catch(error => {
+    console.error(error)
+    response.status(500).end()
   })
 })
 
@@ -66,7 +74,7 @@ app.post('/api/people', (request, response) => {
 
 // Delete person
 app.delete('/api/people/:id', (request, response) => {
-  Person.findByIdAndRemove(request.params.id)
+  Person.findByIdAndDelete(request.params.id)
     .then(result => {
       if (result) {
         response.status(204).end()
