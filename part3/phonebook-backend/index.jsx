@@ -26,14 +26,14 @@ app.get('/info', (request, response, next) => {
     Person.countDocuments({}).then(count => {
         response.send(`<p>Phonebook has info for ${count} people</p>
         <p>${new Date()}</p>`)
-    })
+    }).catch(error => next(error))
 })
 
 // Get all people
 app.get('/api/people', (request, response, next) => {
     Person.find({}).then(person => {
     response.json(person)
-  })
+  }).catch(error => next(error))
 })
 
 // Get person by id
@@ -45,10 +45,7 @@ app.get('/api/people/:id', (request, response, next) => {
       response.status(404).end()
     }
   }
-  ).catch(error => {
-    console.error(error)
-    response.status(500).end()
-  })
+  ).catch(error => next(error))
 })
 
 // Add person
@@ -66,10 +63,7 @@ app.post('/api/people', (request, response, next) => {
 
   person.save().then(savedPerson => {
     response.json(savedPerson)
-  }).catch(error => {
-    console.error(error)
-    response.status(500).json({ error: 'error saving the person' })
-  })
+  }).catch(error => next(error))
 })
 
 // Delete person
@@ -81,11 +75,7 @@ app.delete('/api/people/:id', (request, response, next) => {
       } else {
         response.status(404).json({ error: 'person not found' })
       }
-    })
-    .catch(error => {
-      console.error(error)
-      response.status(400).json({ error: 'malformatted id' })
-    })
+    }).catch(error => next(error))
 })
 
 app.put('/api/people/:id', (request, response, next) => {
