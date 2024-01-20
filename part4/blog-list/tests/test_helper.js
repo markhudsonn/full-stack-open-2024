@@ -62,9 +62,16 @@ const listWithOneBlog = [
   }
 ]
 
+const blogToAdd = {
+  title: 'Blog to add',
+  author: 'Test',
+  url: 'http://test.com',
+  likes: 0
+}
+
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())
 }
 
-module.exports = { initialBlogs, blogsInDb, listWithOneBlog }
+module.exports = { initialBlogs, blogsInDb, listWithOneBlog, blogToAdd }
