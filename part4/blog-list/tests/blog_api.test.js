@@ -58,7 +58,15 @@ describe('adding a blog', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
-    
+  })
+
+  test('adding blog with no title returns 400', async () => {
+    newBlog = helper.blogWithNoTitle
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(400)
   })
 })
 
