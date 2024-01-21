@@ -42,6 +42,23 @@ describe('adding a blog', () => {
 
     const blogsAtEnd = await helper.blogsInDb()
     expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length +1)
+
+    const titles = blogsAtEnd.map(n=>n.title)
+    expect(titles).toContain('Blog to add')
+  })
+
+  test('adding blog with no likes defaults to 0', async () => {
+    newBlog = helper.blogWithoutLikes
+
+    await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    expect(blogsAtEnd[blogsAtEnd.length - 1].likes).toBe(0)
+    
   })
 })
 
