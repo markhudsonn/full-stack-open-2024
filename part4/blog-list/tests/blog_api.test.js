@@ -83,6 +83,25 @@ describe('deletion of a blog', () => {
   const titles = blogsAtEnd.map(r => r.content)
 
   expect(titles).not.toContain(blogToDelete.title)
+  expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
+  })
+})
+
+describe('updating a blog', () => {
+  test('succeeds with status 200 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    const likesAtStart = blogToUpdate.likes
+
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send({ likes:likesAtStart +1 })
+      .expect(200)
+
+    const blogsAtEnd = await helper.blogsInDb()
+    const updatedBlog = blogsAtEnd[0]
+
+    expect(updatedBlog.likes).toBe(likesAtStart + 1)
   })
 })
 
