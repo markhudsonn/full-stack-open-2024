@@ -108,6 +108,17 @@ describe('adding a blog', () => {
       .send(newBlog)
       .expect(400)
   })
+
+  test('with invalid token returns 401', async () => {
+    newBlog = helper.blogToAdd
+
+    await api
+      .post('/api/blogs')
+      .set('Authorization', `bearer ${token}1`)
+      .send(newBlog)
+      .expect(401)
+  }
+  )
 })
 
 describe('deletion of a blog', () => {
