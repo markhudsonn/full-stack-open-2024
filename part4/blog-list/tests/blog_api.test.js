@@ -5,22 +5,58 @@ const app = require ('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
+
+let token = null
+let userId = null
+
+beforeEach(async () => {
+  await User.deleteMany({})
+  const response = await api
+    .post('/api/users')
+    .send({
+      "username": "test",
+      "name": "test",
+      "password": "test"
+    })
+    .expect(201)
+  userId = response.body.id
+})
+
+beforeEach(async () => {
+  const response = await api
+    .post('/api/login')
+    .send({
+      "username": "test",
+      "password": "test"
+    })
+    .expect(200)
+  token = response.body.token
+})
+
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+  await Blog.insertMany(helper.initialBlogs(userId))
 })
 
+
 describe('when there is initially some blogs saved', () => {
+
   test('notes are returned as json', async () => {
     await api
       .get('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .expect(200)
       .expect('Content-Type', /application\/json/)
   })
 
   test("blogs have id property instead of _id", async () => {
-    const response = await api.get("/api/blogs");
+    const response = await api
+      .get("/api/blogs")
+      .set('Authorization', `bearer ${token}`)
+      .expect(200)
+      .expect('Content-Type', /application\/json/)
 
     const ids = response.body.map((blog) => blog.id);
 
@@ -33,15 +69,17 @@ describe('when there is initially some blogs saved', () => {
 describe('adding a blog', () => {
   test('total number of blogs increases by 1 after adding one', async () => {
     newBlog = helper.blogToAdd
+    const blogsAtStart = await helper.blogsInDb()
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
 
     const blogsAtEnd = await helper.blogsInDb()
-    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length +1)
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length + 1)
 
     const titles = blogsAtEnd.map(n=>n.title)
     expect(titles).toContain('Blog to add')
@@ -52,6 +90,7 @@ describe('adding a blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -65,6 +104,7 @@ describe('adding a blog', () => {
 
     await api
       .post('/api/blogs')
+      .set('Authorization', `bearer ${token}`)
       .send(newBlog)
       .expect(400)
   })
@@ -77,13 +117,14 @@ describe('deletion of a blog', () => {
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
+      .set('Authorization', `bearer ${token}`)
       .expect(204)
 
-  const blogsAtEnd = await helper.blogsInDb()
-  const titles = blogsAtEnd.map(r => r.content)
+    const blogsAtEnd = await helper.blogsInDb()
+    const titles = blogsAtEnd.map(r => r.title)
 
-  expect(titles).not.toContain(blogToDelete.title)
-  expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
+    expect(titles).not.toContain(blogToDelete.title)
+    expect(blogsAtEnd.length).toBe(blogsAtStart.length - 1)
   })
 })
 
@@ -95,6 +136,7 @@ describe('updating a blog', () => {
 
     await api
       .put(`/api/blogs/${blogToUpdate.id}`)
+      .set('Authorization', `bearer ${token}`)
       .send({ likes:likesAtStart +1 })
       .expect(200)
 
