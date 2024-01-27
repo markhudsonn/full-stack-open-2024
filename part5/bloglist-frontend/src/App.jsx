@@ -67,6 +67,7 @@ const App = () => {
       setBlogs(blogs.concat(returnedBlog))
       setMessage(`a new blog ${returnedBlog.title} by ${returnedBlog.author} added`)
       blogFormRef.current.toggleVisibility()
+      fetchBlogs()
       setTimeout(() => {
         setMessage(null)
       }, 5000)
