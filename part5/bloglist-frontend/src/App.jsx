@@ -93,6 +93,24 @@ const App = () => {
     }
   }
 
+  const deleteBlog = async (blogObject) => {
+    try {
+      await blogService.remove(blogObject.id)
+      const updatedBlogs = blogs.filter(blog => blog.id !== blogObject.id)
+      setBlogs(updatedBlogs)
+      fetchBlogs()
+      setMessage(`Blog ${blogObject.title} deleted`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      setMessage('Error deleting blog')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   const blogFormRenderer = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
@@ -118,7 +136,7 @@ const App = () => {
           {blogFormRenderer()}
           <h2>blogs</h2>
           {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} deleteBlog={deleteBlog} user={user} />
           )}
         </div>
       }
