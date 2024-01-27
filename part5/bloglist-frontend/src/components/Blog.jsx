@@ -11,13 +11,6 @@ const Blog = ( { blog, updateBlog } ) => {
     display: visible ? '' : 'none'
   };
 
-  const likeBlog = async () => {
-    await updateBlog({
-      ...blog,
-      likes: blog.likes + 1
-    });
-  }
-
   return (
     <div className='blogStyle'>
       {blog.title}
