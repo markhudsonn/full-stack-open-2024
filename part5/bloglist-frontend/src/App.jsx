@@ -79,6 +79,20 @@ const App = () => {
     }
   }
 
+  const updateBlog = async (blogObject) => {
+    try {
+      const returnedBlog = await blogService.update(blogObject.id, blogObject)
+      const updatedBlogs = blogs.map(blog => blog.id !== returnedBlog.id ? blog : returnedBlog)
+      setBlogs(updatedBlogs)
+      fetchBlogs()
+    } catch (exception) {
+      setMessage('Error updating blog')
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    }
+  }
+
   const blogFormRenderer = () => (
     <Togglable buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
@@ -103,8 +117,8 @@ const App = () => {
           <button onClick={() => blogFormRef.current.toggleVisibility()}>Create Blog</button>
           {blogFormRenderer()}
           <h2>blogs</h2>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
           )}
         </div>
       }
