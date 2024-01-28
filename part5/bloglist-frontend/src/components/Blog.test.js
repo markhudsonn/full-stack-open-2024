@@ -25,7 +25,7 @@ describe("<Blog />", () => {
     expect(component.container.querySelector(".blog-title")).toHaveTextContent("Title")
     expect(component.container.querySelector(".blog-author")).toHaveTextContent("Author")
     expect(component.container.querySelector(".blog-url")).not.toBeVisible()
-    expect(component.container.querySelector(".blog-likes")).not.toBeVisible()
+    expect(component.container.querySelector(".like-button")).not.toBeVisible()
   })
 
   test("displays url and likes when button is clicked", () => {
@@ -33,6 +33,21 @@ describe("<Blog />", () => {
     fireEvent.click(button)
 
     expect(component.container.querySelector(".blog-url")).toBeVisible()
-    expect(component.container.querySelector(".blog-likes")).toBeVisible()
+    expect(component.container.querySelector(".like-button")).toBeVisible()
+  })
+
+  test("like button is clicked twice, event handler is called twice", () => {
+    const mockHandler = jest.fn()
+
+    component = render(<Blog blog={blog} updateBlog={mockHandler} />)
+
+    const viewButton = component.container.querySelector(".view-button")
+    fireEvent.click(viewButton)
+
+    const likeButton = component.container.querySelector(".like-button")
+    fireEvent.click(likeButton)
+    fireEvent.click(likeButton)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })

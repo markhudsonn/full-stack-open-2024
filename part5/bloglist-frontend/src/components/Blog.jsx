@@ -35,7 +35,7 @@ const Blog = ( { blog, updateBlog, deleteBlog, user } ) => {
           URL: <a href={blog.url} className='blog-url'>{blog.url}</a>
         </li>
         <li>
-          Likes: {blog.likes} <button onClick={likeBlog} className='blog-likes'>Like</button>
+          Likes: {blog.likes} <button onClick={likeBlog} className='like-button'>Like</button>
         </li>
         <li>Added by: {blog.user.name}</li>
       </ul>
