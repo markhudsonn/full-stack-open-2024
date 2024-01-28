@@ -1,26 +1,26 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
 const Blog = ( { blog, updateBlog, deleteBlog, user } ) => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false)
 
   const toggleVisibility = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   const showWhenVisible = {
     display: visible ? '' : 'none'
-  };
+  }
 
   const likeBlog = async () => {
     await updateBlog({
       ...blog,
       likes: blog.likes + 1
-    });
+    })
   }
 
   const removeBlog = async () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
-      await deleteBlog(blog);
+      await deleteBlog(blog)
     }
   }
 
@@ -46,7 +46,7 @@ const Blog = ( { blog, updateBlog, deleteBlog, user } ) => {
         }
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Blog;
+export default Blog
