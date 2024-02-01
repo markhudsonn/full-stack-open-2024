@@ -25,7 +25,7 @@ const Blog = ( { blog, updateBlog, deleteBlog, user } ) => {
   }
 
   return (
-    <div className='blogStyle'>
+    <div className='blog'>
       <span className='blog-title'>{blog.title}</span> by <span className='blog-author'>{blog.author}</span>
       <button onClick={toggleVisibility} className='view-button'>
         {visible ? 'hide' : 'view'}

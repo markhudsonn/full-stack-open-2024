@@ -14,6 +14,7 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const blogFormRef = useRef()
+  const createBlogButtonRef = useRef()
 
   const fetchBlogs = async () => {
     const blogs = await blogService.getAll()
@@ -112,7 +113,7 @@ const App = () => {
   }
 
   const blogFormRenderer = () => (
-    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+    <Togglable buttonLabel='Create Blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
@@ -132,7 +133,6 @@ const App = () => {
         /> :
         <div>
           <p>Welcome {user.name}! <button onClick={handleLogout}>Logout</button></p>
-          <button onClick={() => blogFormRef.current.toggleVisibility()}>Create Blog</button>
           {blogFormRenderer()}
           <h2>blogs</h2>
           {blogs.sort((a, b) => b.likes - a.likes).map(blog =>

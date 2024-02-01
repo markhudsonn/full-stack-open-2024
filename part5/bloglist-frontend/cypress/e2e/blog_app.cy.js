@@ -60,7 +60,7 @@ describe('Blog app', function() {
     })
 
     it('A blog can be created', function() {
-      cy.contains('new blog').click()
+      cy.contains('Create Blog').click()
       cy.get('#title').type('Test Blog')
       cy.get('#author').type('Test Author')
       cy.get('#url').type('http://www.testurl.com')
@@ -71,7 +71,7 @@ describe('Blog app', function() {
 
     describe('and a blog exists', function() {
       beforeEach(function() {
-        cy.contains('new blog').click()
+        cy.contains('Create Blog').click()
         cy.get('#title').type('Test Blog')
         cy.get('#author').type('Test Author')
         cy.get('#url').type('http://www.testurl.com')
@@ -98,6 +98,20 @@ describe('Blog app', function() {
 
         cy.contains('view').click()
         cy.contains('Remove').should('not.exist')
+      })
+
+      it.only('Blogs are ordered by likes', function() {
+        cy.contains('Create Blog').click()
+        cy.get('#title').type('Blog with less likes')
+        cy.get('#author').type('Test Author')
+        cy.get('#url').type('http://www.testurl.com')
+        cy.get('#create-blog-button').click()
+
+        cy.contains('view').click()
+        cy.get('#like-button').click()
+
+        cy.get('.blog').eq(0).should('contain', 'Test Blog')
+        cy.get('.blog').eq(1).should('contain', 'Blog with less likes')
       })
     })
   })
