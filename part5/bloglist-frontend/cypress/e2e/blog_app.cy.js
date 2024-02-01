@@ -8,7 +8,15 @@ describe('Blog app', function() {
       username: 'testuser',
       password: 'testpassword'
     }
+
+    const anotherUser = {
+      name: 'Another User',
+      username: 'anotheruser',
+      password: 'anotherpassword'
+    }
+
     cy.request('POST', 'http://localhost:3003/api/users/', user)
+    cy.request('POST', 'http://localhost:3003/api/users/', anotherUser)
   })
 
   it('Login form is shown', function() {
@@ -70,10 +78,26 @@ describe('Blog app', function() {
         cy.get('#create-blog-button').click()
       })
 
-      it.only('A blog can be liked', function() {
+      it('A blog can be liked', function() {
         cy.contains('view').click()
         cy.get('#like-button').click()
         cy.get('#likes-counter').contains('1')
+      })
+
+      it('A blog can be deleted by the creator', function() {
+        cy.contains('view').click()
+        cy.contains('Remove').click()
+        cy.contains('Test Blog').should('not.exist')
+      })
+
+      it('A blog cannot be deleted by another user', function() {
+        cy.contains('Logout').click()
+        cy.get('#username').type('anotheruser')
+        cy.get('#password').type('anotherpassword')
+        cy.get('#login-button').click()
+
+        cy.contains('view').click()
+        cy.contains('Remove').should('not.exist')
       })
     })
   })
