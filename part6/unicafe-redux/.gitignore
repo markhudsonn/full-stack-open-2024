@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-# dist
+dist
 dist-ssr
 *.local
 
@@ -22,22 +22,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-# Node.js
-.eslintrc.cjs
-package-lock.json
-package.json
-vite.config.js
-vite.svg
-
-.env
-
-# Practice folders
-part2/exercise1
-part3/notes
-part3/notes-frontend
-part3/phonebook-frontend
-part4/notes
-part5/notes-frontend
-part6/notes
-part6/counter
