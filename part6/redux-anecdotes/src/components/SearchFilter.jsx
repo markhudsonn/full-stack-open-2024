@@ -9,12 +9,16 @@ const Filter = () => {
     dispatch(setFilter(filter))
   }
   const style = {
-    marginBottom: 10
+    marginBottom: 10,
+    border: '1px solid gray',
+    borderRadius: '5px',
+    padding: '5px'
   }
 
   return (
     <div style={style}>
-      filter <input onChange={handleChange} />
+      <label htmlFor="filter">Filter:</label>
+      <input id="filter" type="text" onChange={handleChange} />
     </div>
   )
 }
