@@ -39,6 +39,11 @@
       "id": "2a3c",
       "content": "Testing that notes are stored in the backend",
       "votes": 0
+    },
+    {
+      "id": "7c2f",
+      "content": "Test",
+      "votes": 0
     }
   ]
 }
