@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from '@testing-library/react'
+import { render, screen } from "@testing-library/react";
 import BlogForm from "./BlogForm";
 import userEvent from "@testing-library/user-event";
 
@@ -24,4 +24,4 @@ test("BlogForm calls the event handler it received as props with the right detai
     author: "Author",
     url: "https://www.test.com/",
   });
-})
+});
